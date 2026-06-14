@@ -70,10 +70,10 @@
     const k = sl.value, ab = abar(k), sq = Math.sqrt(ab), sn = Math.sqrt(1 - ab);
     const ctx = cv.ctx, w = cv.w, h = cv.h, pad = 14;
     B.clear(ctx, w, h, C.panel);
-    const split = w * 0.5;
+    const split = w * 0.5, narrow = w < 420;
     // ----- left: scatter -----
     const Lx = pad, Ly = pad + 16, Lw = split - pad * 1.5, Lh = h - Ly - pad;
-    panel(ctx, Lx, Ly, Lw, Lh, "latent distribution  p_k(x)");
+    panel(ctx, Lx, Ly, Lw, Lh, narrow ? "distribution p_k(x)" : "latent distribution  p_k(x)");
     const cx = Lx + Lw / 2, cy = Ly + Lh / 2, sc = Math.min(Lw, Lh) * 0.30;
     ctx.fillStyle = C.accent;
     for (const p of pts) {

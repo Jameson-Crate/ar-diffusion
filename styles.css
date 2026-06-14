@@ -287,9 +287,22 @@ input[type=range]::-moz-range-thumb {
 .endnote { font-family: var(--sans); font-size: 14px; color: var(--faint); margin-top: 60px;
   border-top: 1px solid var(--rule); padding-top: 20px; }
 
+/* ---- mobile: keep multi-option controls reachable ---- */
+@media (max-width: 640px) {
+  .demo-head { flex-direction: column; align-items: stretch; }
+  .demo-head .seg { width: 100%; }
+  /* segmented controls become a 2-column grid so every option is visible/tappable */
+  .seg { display: grid; grid-template-columns: 1fr 1fr; }
+  .seg button { border-right: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 9px 8px; }
+  .seg button:nth-child(2n) { border-right: none; }
+  .seg button:nth-last-child(-n+2):nth-child(odd) { border-bottom: none; }
+  .seg button:last-child { border-bottom: none; }
+  .control { flex-basis: 100%; min-width: 0; }
+}
 @media (max-width: 520px) {
   body { font-size: 18px; }
-  .control { min-width: 120px; }
+  .masthead { padding-top: 48px; }
+  h2 { font-size: 25px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

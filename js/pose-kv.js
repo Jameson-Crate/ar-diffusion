@@ -66,8 +66,8 @@
     ctx.beginPath(); ctx.moveTo(10, 0); ctx.lineTo(-6, 6); ctx.lineTo(-6, -6); ctx.closePath(); ctx.fill(); ctx.restore();
 
     // ---- right: KV cache + reconstructed view ----
-    const rx = mx + mapS + 18, rw = w - rx - 10;
-    ctx.fillStyle = C.faint; ctx.font = "600 10.5px system-ui"; ctx.fillText("compressed KV cache", rx, my + 10);
+    const rx = mx + mapS + 18, rw = w - rx - 10, nar = w < 560;
+    ctx.fillStyle = C.faint; ctx.font = "600 10.5px system-ui"; ctx.fillText(nar ? "KV cache" : "compressed KV cache", rx, my + 10);
     const cols = TOK.length, cw = rw / cols, ky = my + 18, kh = 24;
     for (let i = 0; i < cols; i++) {
       const on = retSet.has(i);
@@ -76,12 +76,12 @@
       if (on) { ctx.strokeStyle = C.accent; ctx.lineWidth = 2; ctx.strokeRect(rx + i * cw + 1, ky, cw - 2, kh); }
     }
     ctx.fillStyle = C.muted; ctx.font = "10px system-ui"; ctx.textAlign = "left";
-    ctx.fillText("glowing = retrieved (pose match)", rx, ky + kh + 13);
+    ctx.fillText(nar ? "↑ retrieved (pose match)" : "glowing = retrieved (pose match)", rx, ky + kh + 13);
 
     // reconstructed view from retrieved tokens
     const vy = ky + kh + 28, vh = my + mapS - vy - 4;
     ctx.fillStyle = "#fff"; ctx.fillRect(rx, vy, rw, vh); ctx.strokeStyle = C.rule; ctx.strokeRect(rx, vy, rw, vh);
-    ctx.fillStyle = C.faint; ctx.font = "10px system-ui"; ctx.fillText("reconstructed view", rx + 4, vy + 13);
+    ctx.fillStyle = C.faint; ctx.font = "10px system-ui"; ctx.fillText(nar ? "recon. view" : "reconstructed view", rx + 4, vy + 13);
     const g = ctx.createLinearGradient(0, vy, 0, vy + vh); g.addColorStop(0, "#cfe7f4"); g.addColorStop(1, "#eef7fb");
     ctx.save(); ctx.beginPath(); ctx.rect(rx + 1, vy + 18, rw - 2, vh - 20); ctx.clip(); ctx.fillStyle = g; ctx.fillRect(rx, vy + 18, rw, vh);
     if (ret.length) {
