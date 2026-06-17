@@ -73,10 +73,12 @@
   }
 
   function tick() {
-    f++; if (f > 60) { f = 0; hist = []; }
+    f++; if (f > 60) f = 1;                 // cycle the decode-step counter (no blank reset)
     hist.push(stepTime(f)); if (hist.length > N) hist.shift();
     draw();
   }
-  if (B.reduced) { for (let i = 0; i < 40; i++) tick(); }
+  // pre-fill the buffer so the chart is populated immediately and never flashes empty
+  for (let i = 1; i <= N; i++) { f = i; hist.push(stepTime(i)); if (hist.length > N) hist.shift(); }
+  if (B.reduced) { draw(); }
   else { let c = 0; B.visibleLoop(root, () => { c++; if (c % 6 === 0) tick(); else draw(); }); }
 })();

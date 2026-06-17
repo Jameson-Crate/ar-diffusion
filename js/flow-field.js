@@ -76,16 +76,30 @@
     const t = B.clamp(uu, 0, 1);
     ctx.save(); ctx.beginPath(); ctx.rect(8, 8, w - 16, h - 16); ctx.clip(); // few-step paths can overshoot
 
-    // field arrows
+    // field arrows — a bounded direction field. Raw |v| blows up far from the
+    // manifold and as t→1, so we draw unit directions at a capped length and let
+    // opacity (not length) carry the magnitude. Keeps the field readable.
     if (showField) {
-      const gx = 13, gy = 8;
-      ctx.lineWidth = 1; ctx.strokeStyle = "#cfcabf"; ctx.fillStyle = "#cfcabf";
+      const gx = 11, gy = 7;
+      const colW = (X(span, w) - X(-span, w)) / gx;     // px between grid columns
+      const maxLen = colW * 0.5;                          // never reach the neighbour
+      ctx.lineWidth = 1.4; ctx.lineCap = "round";
       for (let i = 1; i < gx; i++) for (let j = 1; j < gy; j++) {
         const xx = -span + (2 * span) * i / gx, yy = -span + (2 * span) * j / gy;
-        const v = vfield(xx, yy, t); const mag = Math.hypot(v[0], v[1]) || 1e-6;
-        const sc = 0.10, ax = X(xx, w), ay = Y(yy, h);
-        B.arrow(ctx, ax, ay, ax + v[0] * sc / span * (w * 0.42), ay - v[1] * sc / span * (h * 0.42), 3);
+        const v = vfield(xx, yy, t), mag = Math.hypot(v[0], v[1]);
+        if (mag < 1e-3) continue;
+        const ax = X(xx, w), ay = Y(yy, h);
+        const dx = v[0] / mag, dy = -v[1] / mag;          // screen-space unit dir (y flips)
+        const s = Math.tanh(mag * 0.8);                   // 0..1 strength
+        const L = maxLen * (0.5 + 0.5 * s);
+        // draw from the tail back so the head sits at the grid node it acts on
+        const tx = ax - dx * L * 0.5, ty = ay - dy * L * 0.5;
+        const hx = ax + dx * L * 0.5, hy = ay + dy * L * 0.5;
+        const col = "rgba(122,116,104," + (0.3 + 0.45 * s).toFixed(3) + ")";
+        ctx.strokeStyle = col; ctx.fillStyle = col;
+        B.arrow(ctx, tx, ty, hx, hy, 5.5);
       }
+      ctx.lineCap = "butt";
     }
     // target ring
     ctx.fillStyle = C.accent;

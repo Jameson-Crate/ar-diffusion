@@ -69,12 +69,15 @@
 
   function draw() {
     const ctx = cv.ctx, g = geom(), { ox, oy, cell, S, noiseH, w, h } = g;
-    const tsec = performance.now() / 1000;
+    const live = performance.now() / 1000;
+    // animation phase: live while hovering, otherwise tied to `clock` (which only
+    // advances while playing) so Pause freezes the pulse and packets completely.
+    const phase = hover ? live : clock;
     B.clear(ctx, w, h, C.panel);
 
     // which query frame is the read head on, and how far through gathering it is
     const cursor = hover ? hover.i : (pos < T ? Math.floor(pos) : -1);
-    const rowProg = hover ? ((tsec * 0.8) % 1) : smooth(pos - Math.floor(pos));
+    const rowProg = hover ? ((live * 0.8) % 1) : smooth(pos - Math.floor(pos));
     const reveal = mode !== 0;                 // causal family reveals frames top→bottom
 
     // axis labels
@@ -133,7 +136,7 @@
         ctx.beginPath(); ctx.arc(px, dcy, 2.6, 0, 7); ctx.fill(); ctx.globalAlpha = 1;
       }
       // pulsing self-cell (the frame writing its own token)
-      const pr = 1 + 0.18 * Math.sin(tsec * 6);
+      const pr = 1 + 0.18 * Math.sin(phase * 6);
       ctx.strokeStyle = C.accent; ctx.lineWidth = 2.2;
       ctx.strokeRect(dcx - cell / 2 * pr + 0.5, dcy - cell / 2 * pr + 0.5, cell * pr - 1, cell * pr - 1);
     }
