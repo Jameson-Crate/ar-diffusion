@@ -163,6 +163,43 @@ p code, li code {
 }
 .aside b { color: var(--fg); }
 
+/* ---- article comparison tables ---- */
+.table-wrap {
+  width: min(var(--col-wide), 94vw);
+  margin: 28px 0 32px 50%;
+  transform: translateX(-50%);
+  overflow-x: auto;
+}
+@media (max-width: 1020px) { .table-wrap { width: 100%; margin-left: 0; transform: none; } }
+.claim-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--sans);
+  font-size: 13.5px;
+  line-height: 1.45;
+  background: #fff;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.claim-table th,
+.claim-table td {
+  text-align: left;
+  vertical-align: top;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--rule-soft);
+}
+.claim-table th {
+  color: var(--muted);
+  font-size: 11px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  background: var(--bg-soft);
+}
+.claim-table tr:last-child td { border-bottom: none; }
+.claim-table td:first-child { color: var(--fg); font-weight: 700; }
+
 /* ---- figures ---- */
 figure {
   margin: 40px 0; padding: 0;
@@ -275,6 +312,7 @@ input[type=range]::-moz-range-thumb {
 .refs .tag { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em;
   padding: 1px 7px; border-radius: 20px; margin-left: 6px; vertical-align: 1px; }
 .refs .tag.est { color: var(--good); background: rgba(63,143,79,.12); }
+.refs .tag.pre { color: var(--accent-2); background: rgba(47,111,151,.12); }
 .refs .tag.rep { color: var(--accent); background: rgba(196,80,42,.12); }
 
 /* misc */

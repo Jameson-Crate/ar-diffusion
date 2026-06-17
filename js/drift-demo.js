@@ -72,9 +72,12 @@
     // manifold ring
     ctx.setLineDash([4, 4]); ctx.strokeStyle = "#c9c3b8"; ctx.lineWidth = 1.5;
     ctx.beginPath(); ctx.arc(cx, cy, R, 0, 7); ctx.stroke(); ctx.setLineDash([]);
+    // clip trails to the phase-space panel: the free-running rollout collapses off to infinity
+    ctx.save(); ctx.beginPath(); ctx.rect(8, 8, w - 16, topH - 12); ctx.clip();
     drawTrail(ctx, TF, cx, cy, R, C.good);
     drawTrail(ctx, DF, cx, cy, R, C.accent2);
     drawTrail(ctx, FR, cx, cy, R, C.bad);
+    ctx.restore();
 
     // ---- bottom: error curves ----
     const bx = 8, bw = w - 16, bh = h - botY - 8;
@@ -85,7 +88,9 @@
     function ey(e) { return botY + bh - padB + 4 - (bh - padB - 8) * B.clamp(e / emax, 0, 1); }
     // axis
     ctx.strokeStyle = "#eee"; ctx.beginPath(); ctx.moveTo(bx + 6, ey(0)); ctx.lineTo(bx + bw - 6, ey(0)); ctx.stroke();
+    ctx.save(); ctx.beginPath(); ctx.rect(bx, botY, bw, bh); ctx.clip();
     curve(ctx, errTF, ex, ey, C.good); curve(ctx, errDF, ex, ey, C.accent2); curve(ctx, errFR, ex, ey, C.bad);
+    ctx.restore();
     ctx.fillStyle = C.faint; ctx.font = "10px system-ui"; ctx.textAlign = "right";
     ctx.fillText("frame t →", bx + bw - 8, botY + bh - 6);
   }

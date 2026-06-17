@@ -75,6 +75,7 @@
     const Lx = pad, Ly = pad + 16, Lw = split - pad * 1.5, Lh = h - Ly - pad;
     panel(ctx, Lx, Ly, Lw, Lh, narrow ? "distribution p_k(x)" : "latent distribution  p_k(x)");
     const cx = Lx + Lw / 2, cy = Ly + Lh / 2, sc = Math.min(Lw, Lh) * 0.30;
+    ctx.save(); ctx.beginPath(); ctx.rect(Lx, Ly, Lw, Lh); ctx.clip(); // keep the cloud inside its panel
     ctx.fillStyle = C.accent;
     for (const p of pts) {
       const x = sq * p.x + sn * p.ex, y = sq * p.y + sn * p.ey;
@@ -82,6 +83,7 @@
       ctx.beginPath(); ctx.arc(cx + x * sc, cy - y * sc, 2.1, 0, 7); ctx.fill();
     }
     ctx.globalAlpha = 1;
+    ctx.restore();
     // ----- right: image -----
     const Rx = split + pad * 0.5, Ry = Ly, Rw = w - Rx - pad, Rh = h - Ly - pad;
     panel(ctx, Rx, Ry, Rw, Rh, "a sample  x_k");

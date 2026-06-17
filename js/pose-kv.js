@@ -53,7 +53,8 @@
     ctx.beginPath(); ctx.moveTo(camX, camY);
     ctx.arc(camX, camY, RANGE * sc, -heading - FOV, -heading + FOV); ctx.closePath(); ctx.fill();
     ctx.restore();
-    // tokens
+    // tokens (clipped to the map panel so glow/markers can't bleed past the frame)
+    ctx.save(); ctx.beginPath(); ctx.rect(mx, my, mapS, mapS); ctx.clip();
     for (let i = 0; i < TOK.length; i++) {
       const tx = cx + TOK[i].x * sc, ty = cy - TOK[i].y * sc, on = retSet.has(i);
       if (on) { ctx.shadowColor = "hsl(" + TOK[i].hue + ",70%,50%)"; ctx.shadowBlur = 12; }
@@ -61,6 +62,7 @@
       ctx.beginPath(); ctx.arc(tx, ty, on ? 7 : 5, 0, 7); ctx.fill(); ctx.shadowBlur = 0;
       ctx.strokeStyle = "#fff"; ctx.lineWidth = 1.5; ctx.stroke();
     }
+    ctx.restore();
     // camera
     ctx.fillStyle = C.accent; ctx.save(); ctx.translate(camX, camY); ctx.rotate(-heading);
     ctx.beginPath(); ctx.moveTo(10, 0); ctx.lineTo(-6, 6); ctx.lineTo(-6, -6); ctx.closePath(); ctx.fill(); ctx.restore();

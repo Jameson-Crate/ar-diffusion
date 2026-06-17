@@ -74,6 +74,7 @@
     B.clear(ctx, w, h, C.panel);
     ctx.strokeStyle = C.rule; ctx.strokeRect(8, 8, w - 16, h - 16);
     const t = B.clamp(uu, 0, 1);
+    ctx.save(); ctx.beginPath(); ctx.rect(8, 8, w - 16, h - 16); ctx.clip(); // few-step paths can overshoot
 
     // field arrows
     if (showField) {
@@ -104,6 +105,7 @@
       // head
       ctx.fillStyle = C.good; ctx.beginPath(); ctx.arc(X(hx, w), Y(hy, h), 2.6, 0, 7); ctx.fill();
     }
+    ctx.restore();
 
     // measure off-manifold error at t=1 endpoints
     let err = 0;
